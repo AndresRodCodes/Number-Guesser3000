@@ -30,14 +30,44 @@ guessBtn.addEventListener('click', function() {
 	// Get users guess
 	let guess = parseInt(guessInput.value);
 	// Check the guess is a valid number
-	if (guess === NaN || guess < min || guess > max) {
+	if (isNaN(guess) || guess < min || guess > max) {
 		// Display error message
-		setMessage(`Please enter a number between ${min} and ${max}`);
+		setMessage(`Please enter a number between ${min} and ${max}`, 'red');
 		// Clear user guess
 		guessInput.value = '';
 	}
+
+	// Check if won
+	if (guess === winningNum) {
+		// Disable the input
+		guessInput.disabled = true;
+		// Apply green border
+		guessInput.style.borderColor = 'green';
+		// Show winning message
+		setMessage(`${guess} is correct. YOU WIN!`, 'green');
+	} else {
+		guessesLeft -= 1;
+
+		// Game over - lost
+		if (guessesLeft === 0) {
+			// Disable the input
+			guessInput.disabled = true;
+			// Apply red border
+			guessInput.style.borderColor = 'red';
+			// Show losing message
+			setMessage(`GAME OVER. You Lost. The number was ${winningNum}`, 'red');
+		} else {
+			// Apply red border
+			guessInput.style.borderColor = 'red';
+			// Show amount of guess left
+			setMessage(`${guess} is incorrect. ${guessesLeft} guesses left.`, 'red');
+			// Clear user guess
+			guessInput.value = '';
+		}
+	}
 });
 
-function setMessage(msg) {
+function setMessage(msg, color) {
+	message.style.color = color;
 	message.textContent = msg;
 }
